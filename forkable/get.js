@@ -26,6 +26,7 @@ import axios from 'axios';
  * @return {response}
  */
 const get = (url, projectID, file='') => {
+  // This is is used to make remote calls to cardano chains via Blockfrost
   return axios({
     method: 'get',
     headers: {

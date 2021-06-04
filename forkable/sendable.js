@@ -17,7 +17,7 @@
 import blockfrost from './blockfrost.js'
 
 const price = '2000000'; // Lovelace
-const minimum = 200000
+const minimum = 200000  // Never used
 
 /**
  * 
@@ -51,6 +51,8 @@ const helper = (all_tx, sender, addresses) => {
 const build_sendable = (tx, sender) => {
   return blockfrost.getTrxIOInfo(tx).then((res) => {
     // INPUTS // OUTPUTS
+    // res should be subjected to unit test
+    // Data should be check for undefined or emptiness before indexing
     const inputs = res.data.inputs;
     const outputs = res.data.outputs;
     const potential_address = inputs[0].address

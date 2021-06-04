@@ -67,6 +67,7 @@ const getTokens = (txin, tokens) => {
     return tokens
   }
   if (txin[0] in tokens) {
+    // This is to add values up, but txin is a string therefore it would be concatenating
     tokens[txin[0]] += txin[1]
   } else {
     tokens[txin[0]] = txin[1]
@@ -85,6 +86,7 @@ const getTokens = (txin, tokens) => {
  * @return {int, int, string}
  */
 const processUtxo = () => {
+  // This is Json, it should be better if parsed
   const data = fs.readFileSync('utxo.json', 'UTF-8');
   // split the contents by new line
   const lines = data.split(/\r?\n/);
@@ -97,6 +99,7 @@ const processUtxo = () => {
     if (line[0] !== ' ' && line[0] !== '-' && line !== '') {
       counter += 1;
       const tx = line.split(' ').filter((entry) => {return entry.trim() !== ''});
+      // Build serials of transaction input. 
       txin += tx[0] + '#' + tx[1] + ' --tx-in '
       tokens = getTokens(tx.slice(2).reverse(), tokens)
     }
@@ -141,6 +144,7 @@ const mintingString = (low, high, policyId, assetBase, precision=5) => {
  * @param {object} tokens The bank of available tokens to send.
  * @param {object} addresses An object of addresses and values.
  */
+// This need to the tested
 const customTxOut = (sender, tokens, addresses) => {
   // https://docs.cardano.org/en/latest/native-tokens/minimum-ada-value-requirement.html
   // MiniADA is actually a calculation.
@@ -162,6 +166,7 @@ const customTxOut = (sender, tokens, addresses) => {
   }
   // Calculate lovelace cost.
   const N = Object.keys(addresses).length;
+  // One can't tell when tokens.lovalace becomes number?
   tokens.lovelace -= N*minADA;
   
   txout += sender +'+'+ tokens.lovelace + '+';
@@ -252,6 +257,11 @@ const customTxOut = (sender, tokens, addresses) => {
  * @param {file} policyScript The policy script.
  * @return {Promise}
  */
+// This is uses cardano-cli to perform signing of transaction.
+// The transaction is already produced and is inside a file called tx.raw
+//  This signing uses two keys and script file. This needs to be confirmed
+//  tx.raw should be passed as input
+// Output is in a file. 
  const signMint = (minterSKey, policySKey, policyScript) => {
   const command = `cardano-cli transaction sign \
   --tx-body-file tx.raw \
@@ -270,6 +280,7 @@ const customTxOut = (sender, tokens, addresses) => {
  * @param {file} policyScript The policy script.
  * @return {Promise}
  */
+// Wrong comment above. This signs with minter secret key
  const sign = (minterSKey) => {
   const command = `cardano-cli transaction sign \
   --tx-body-file tx.raw \

@@ -29,6 +29,7 @@ const send = (sender, skey, addresses) => {
     trx.write('protocol.json', params)
   });
   // Get Sender UTXO
+  // Unit test needed
   trx.utxo(sender).then((utxo) => {
     trx.write('utxo.json', utxo)
   });
@@ -43,9 +44,11 @@ const send = (sender, skey, addresses) => {
     // Build draft transaction
     trx.buildRaw(txin, txout , 0, final, 'metadata.json', 'tx.draft')
     // Estimate the fee
+    //This check should be done at the start of send function.
     if (Object.keys(addresses).length === 0) {return false}
     trx.fee(counter, 1+Object.keys(addresses).length).then(value => {
       const fee = value.split(' ')[0];
+      // Substract fee from a supposedly number type. fee should be cast to number.
       tokens.lovelace -= fee;
       // Get new txout here
       txout = trx.customTxOut(sender, tokens, addresses);
