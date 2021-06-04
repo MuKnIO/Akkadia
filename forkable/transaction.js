@@ -35,6 +35,7 @@ const write = (fileName, data) => {
  * Get Protocol Parameters and writes to the protocol.json file.
  * @return {Promise}
  */
+// This is not written to protocol.json file. Wrong!
 const params = () => {
   const command = `cardano-cli query protocol-parameters \
   ${MAINNET}`;
@@ -85,6 +86,7 @@ const getTokens = (txin, tokens) => {
  * @param {string} utxo
  * @return {int, int, string}
  */
+// Wrong parameters
 const processUtxo = () => {
   // This is Json, it should be better if parsed
   const data = fs.readFileSync('utxo.json', 'UTF-8');
@@ -321,3 +323,8 @@ export default {
   submit,
   customTxOut
 };
+
+var txin = "B2+C7+D1+B2+C9";
+//getTokens = (txin, tokens)
+var foo = getTokens(txin, {});
+console.log(foo)

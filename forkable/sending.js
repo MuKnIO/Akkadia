@@ -31,9 +31,11 @@ const send = (sender, skey, addresses) => {
   // Get Sender UTXO
   // Unit test needed
   trx.utxo(sender).then((utxo) => {
+    // utxo is not json string. 
     trx.write('utxo.json', utxo)
   });
   // Get balance, tx-in-count, and tx-in
+  // This function needs testing, it won't generate expected results.
   const [txin, tokens, counter] = trx.processUtxo();
   let txout = trx.customTxOut(sender, tokens, addresses) // Build custom out
   console.log(txin, tokens, counter)
